@@ -6,6 +6,7 @@ import Error from "../../Shared/Error";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import axios from "axios";
 import baseURL from "../../assets/common/baseUrl";
+import Toast from "react-native-toast-message";
 
 const Register = (props) => {
   const [email, setEmail] = useState("");
@@ -22,19 +23,30 @@ const Register = (props) => {
       name,
       email,
       password,
-      role: 0,
     };
 
     axios
       .post(`${baseURL}users/register`, user)
       .then((res) => {
         if (res.status == 200) {
+          Toast.show({
+            text1: "Registration successful!",
+            text2: "You may log in.",
+            topOffset: 60,
+            type: "success",
+          });
           setTimeout(() => {
             props.navigation.navigate("Login");
           }, 500);
         }
       })
-      .catch((error) => {});
+      .catch((error) => {
+        Toast.show({
+          text1: "Please try again.",
+          topOffset: 60,
+          type: "error",
+        });
+      });
   };
 
   return (
